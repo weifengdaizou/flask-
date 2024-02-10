@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/detail.css') }}">
+{#    <script src = '{{ url_for('static', filename = 'js/detail.js') }}'></script>#}
+{% endblock %}
+
+{% block title %}{{question.title}}{% endblock %}
+
+{% block main %}
+    <h3 class="page-title">{{ question.title }}</h3>
+    <p class="question-info">
+        <span>{{ question.author.username }}</span>
+        <span>{{ question.create_time }}</span>
+    </p>
+    <hr>
+    <p class="question-content"></p>
+    <hr>
+    <h4 class="comment-group-title">评论（{{ question.details | length }}）：</h4>
+    <form action="{{ url_for('qa.answer_public') }}" method="post">
+        <div class="form-container">
+            <div class="form-group">
+                <input type="text" placeholder="请填写评论" name="content" class="form-control">
+                <input type="hidden" name='question_id' value="{{ question.id }}">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" id = 'pl'>评论()</button>
+            </div>
+        </div>
+    </form>
+    <ul class="comment-group">
+        {% for answer in question.details %}
+            <li>
+                <div class="user-info">
+                    <img class="avatar" src="{{ url_for('static',filename='images/zhiliao.png') }}" alt="">
+                    <span class="username">{{ answer.author_user.username }}</span>
+                    <span class="create-time">{{ answer.create_time }}</span>
+                </div>
+                <p class="comment-content">{{ answer.content }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
